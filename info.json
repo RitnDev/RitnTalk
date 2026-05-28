@@ -1,0 +1,12 @@
+{
+  "name": "RitnTalk",
+  "version": "1.0.0",
+  "title": "RitnTalk",
+  "author": "Ritn",
+  "description": "Utilisation de l'envoi par UDP pour communiquer avec un plugin Mumble et obtenir de la VoIP en jeu.\nUsing UDP sending to communicate with a Mumble plugin and obtain VoIP in-game.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base",
+    "RitnBaseGame >= 0.6"
+  ]
+}
