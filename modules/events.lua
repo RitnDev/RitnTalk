@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------
 -- EVENTS
 ---------------------------------------------------------------------------------------------
+local flib = require(ritnlib.defines.talk.functions)
+---------------------------------------------------------------------------------------------
 
 -- on_init
 local function on_init_mod()
@@ -12,18 +14,13 @@ local function on_init_mod()
 end
 
 -- Envoi de la position
-local function on_nth_tick()
+local function send_position()
     local players = remote.call('RitnCoreGame', 'get_players')
     for index, player in pairs(players) do 
 		if player.connected and player.changed_position then 
 			local luaPlayer = game.get_player(index) 
 			if (luaPlayer) then 
-				local packet = string.format(
-					"POS %.3f %.3f", 
-					luaPlayer.position.x,
-					luaPlayer.position.y
-				)
-				helpers.send_udp(1717, packet, index)
+				flib.send_udp_position(luaPlayer)
 			end
 			player.changed_position = false
 			players[index] = player
@@ -32,8 +29,21 @@ local function on_nth_tick()
 	remote.call('RitnCoreGame', 'set_players', players)
 end
 
+-- Raffraichissement de l'etat du joueur à intervalle régulier afin de vérifier s'il est toujours actif
+local function refresh_state()
+	local players = remote.call('RitnCoreGame', 'get_players')
+    for _, player in pairs(game.connected_players) do 
+		local rPlayer = RitnCorePlayer(game.get_player(player.index))
+		if (rPlayer) then 
+			flib.send_udp_state(rPlayer)
+		end
+    end
+end
+
 -------------------------------------------
-script.on_nth_tick(60 / 20, on_nth_tick)
+script.on_nth_tick(60 / 20, send_position)
+------------------------------------------------------------------
+script.on_nth_tick(60 * 4.5, refresh_state)
 -------------------------------------------
 local module = { events = {} }
 -------------------------------------------

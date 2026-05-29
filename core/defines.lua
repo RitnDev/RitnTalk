@@ -24,6 +24,7 @@ defines.name_prefix = "ritnmods-talk-"
 defines.mod_name = "ritntalk"
 defines.source = "__RitnTalk__"
 defines.modules = "core/modules"
+defines.functions = "core/functions"
 defines.class = "core/class"
 
 -- Modules
